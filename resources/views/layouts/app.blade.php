@@ -1,0 +1,43 @@
+<!doctype html>
+<html @php(language_attributes())>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @php(do_action('get_header'))
+    @php(wp_head())
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  </head>
+
+  <body @php(body_class())>
+    @php(wp_body_open())
+
+    <div id="app">
+      <a class="sr-only focus:not-sr-only" href="#main">
+        {{ __('Skip to content', 'sage') }}
+      </a>
+
+      @php($homepage_id = \App\v0_current_homepage_id())
+      @if (\App\v0_preloader_enabled($homepage_id))
+        @include('partials.preloader')
+      @endif
+
+      @include('sections.header')
+
+      <main id="main" class="main">
+        @yield('content')
+      </main>
+
+      @hasSection('sidebar')
+        <aside class="sidebar">
+          @yield('sidebar')
+        </aside>
+      @endif
+
+      @include('partials.video-lightbox')
+    </div>
+
+    @php(do_action('get_footer'))
+    @php(wp_footer())
+  </body>
+</html>

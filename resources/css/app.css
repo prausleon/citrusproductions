@@ -1,0 +1,303 @@
+/* Citrus Video Productions — brand fonts (ported from the v0 design's next/font/google) */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss" theme(static);
+@source "../../app/**/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+@theme inline {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Quicksand', ui-rounded, sans-serif;
+
+  --color-citrus-orange: var(--citrus-orange);
+  --color-citrus-orange-dark: var(--citrus-orange-dark);
+  --color-citrus-green: var(--citrus-green);
+  --color-citrus-green-dark: var(--citrus-green-dark);
+  --color-citrus-green-tint: var(--citrus-green-tint);
+  --color-citrus-cream: var(--citrus-cream);
+  --color-ink: var(--ink);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --radius-3xl: 1.65rem;
+  --radius-4xl: 2rem;
+}
+
+:root {
+  color-scheme: light;
+
+  --citrus-orange: #f37a40;
+  --citrus-orange-dark: #d85f27;
+  --citrus-green: #8cc63d;
+  --citrus-green-dark: #6fa32c;
+  --citrus-green-tint: #eef6dd;
+  --citrus-cream: #fff6ec;
+  --ink: #1a1a1a;
+
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/*
+ * Desktop-only line breaks
+ * ------------------------
+ * Use <br class="br-desktop"> inside any CMB2 field that allows HTML (e.g.
+ * the Hero "Headline — line 2" field) to force a line break only on larger
+ * screens — it collapses to nothing below the breakpoint so the text just
+ * wraps naturally on phones instead of breaking wherever it was typed.
+ */
+.br-desktop {
+  display: none;
+}
+@media (min-width: 768px) {
+  .br-desktop {
+    display: inline;
+  }
+}
+
+/*
+ * Hero intro
+ * ----------
+ * Visitors see the intro video inside the hero's frosted box,
+ * then the headline copy fades in over it. State lives on the hero
+ * <section> as data-intro="pending" | "playing" | "done" — set by an inline
+ * script in resources/views/sections/hero.blade.php, advanced by
+ * initHeroIntro() in resources/js/app.js. No data-intro at all (reduced
+ * motion, no JS) means the video never renders and the copy simply shows.
+ */
+[data-hero-video-wrap] {
+  display: none;
+}
+[data-intro] [data-hero-video-wrap] {
+  display: block;
+  transition: opacity 0.6s ease, visibility 0.6s;
+}
+[data-intro] [data-hero-copy] {
+  transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s, visibility 0.6s;
+}
+[data-intro] [data-hero-box] {
+  transition: background-color 0.6s ease;
+}
+
+/* While the video plays the box goes solid white — the video's own background is pure white, so this makes it seamless instead of a white rectangle inside the frosted glass. */
+[data-intro='pending'] [data-hero-box],
+[data-intro='playing'] [data-hero-box] {
+  background-color: #fff;
+}
+[data-intro='pending'] [data-hero-copy],
+[data-intro='playing'] [data-hero-copy] {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.75rem);
+}
+[data-intro='done'] [data-hero-video-wrap] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/*
+ * Failsafes — if the JS that advances the intro / dismisses the loading
+ * screen never runs (bundle failed to load, script error), these time out on
+ * their own so the page can never be left blocked or showing nothing.
+ */
+@keyframes hero-failsafe-copy {
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}
+@keyframes hero-failsafe-video {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes hero-failsafe-box {
+  to {
+    background-color: color-mix(in oklab, var(--background) 45%, transparent);
+  }
+}
+@keyframes preloader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+[data-intro='pending'] [data-hero-copy],
+[data-intro='playing'] [data-hero-copy] {
+  animation: hero-failsafe-copy 0s linear 25s forwards;
+}
+[data-intro='pending'] [data-hero-video-wrap],
+[data-intro='playing'] [data-hero-video-wrap] {
+  animation: hero-failsafe-video 0s linear 25s forwards;
+}
+[data-intro='pending'] [data-hero-box],
+[data-intro='playing'] [data-hero-box] {
+  animation: hero-failsafe-box 0s linear 25s forwards;
+}
+[data-preloader] {
+  animation: preloader-failsafe 0.7s ease 15s forwards;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* infinite marquee rows — Clients section */
+  @keyframes marquee-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes marquee-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+  .animate-marquee-left {
+    animation: marquee-left linear infinite;
+  }
+  .animate-marquee-right {
+    animation: marquee-right linear infinite;
+  }
+
+  @keyframes citrus-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(8deg); }
+  }
+  .animate-citrus-float {
+    animation: citrus-float 9s ease-in-out infinite;
+  }
+
+  @keyframes citrus-spin {
+    to { transform: rotate(360deg); }
+  }
+  .animate-citrus-spin {
+    animation: citrus-spin 40s linear infinite;
+  }
+}
+
+/*
+ * Contact Form 7 styling
+ * ----------------------
+ * CF7 renders its own markup (.wpcf7-form) that we can't add Tailwind classes
+ * to directly from the shortcode, so it's restyled here to match the design.
+ * See CF7-INTEGRATION.md for the recommended form-tag template (with inline
+ * `class:` attributes) that pairs with these rules.
+ */
+.wpcf7-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.wpcf7-form p {
+  margin: 0;
+}
+.wpcf7-form label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: color-mix(in oklab, var(--ink) 70%, transparent);
+}
+.wpcf7-form .cf7-grid {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .wpcf7-form .cf7-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.wpcf7-form input[type='text'],
+.wpcf7-form input[type='email'],
+.wpcf7-form input[type='tel'],
+.wpcf7-form textarea {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in oklab, var(--ink) 15%, transparent);
+  background: color-mix(in oklab, var(--citrus-cream) 40%, transparent);
+  padding: 0.75rem 1rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.wpcf7-form input[type='text']:focus,
+.wpcf7-form input[type='email']:focus,
+.wpcf7-form input[type='tel']:focus,
+.wpcf7-form textarea:focus {
+  border-color: var(--citrus-orange);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--citrus-orange) 30%, transparent);
+}
+.wpcf7-form textarea {
+  resize: vertical;
+}
+.wpcf7-form input[type='submit'] {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  border-radius: 9999px;
+  background: var(--citrus-orange);
+  padding: 0.875rem 2rem;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 25px -10px color-mix(in oklab, var(--citrus-orange) 60%, transparent);
+  transition: background-color 0.15s;
+}
+.wpcf7-form input[type='submit']:hover {
+  background: var(--citrus-orange-dark);
+}
+.wpcf7-form input[type='submit']:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.wpcf7-form .wpcf7-not-valid-tip {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: #dc2626;
+}
+.wpcf7-form .wpcf7-response-output {
+  margin: 0;
+  border-radius: 0.75rem;
+  border-width: 1px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+.wpcf7-form.sent .wpcf7-response-output {
+  border-color: color-mix(in oklab, var(--citrus-green) 40%, transparent);
+  background: color-mix(in oklab, var(--citrus-green) 12%, transparent);
+  color: var(--citrus-green-dark);
+}
+.wpcf7-form.invalid .wpcf7-response-output,
+.wpcf7-form.unaccepted .wpcf7-response-output,
+.wpcf7-form.spam .wpcf7-response-output,
+.wpcf7-form.failed .wpcf7-response-output {
+  border-color: #fca5a5;
+  background: #fef2f2;
+  color: #b91c1c;
+}
