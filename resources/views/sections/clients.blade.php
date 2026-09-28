@@ -15,10 +15,11 @@
     ? array_values(array_filter($clients_group, fn ($c) => ! empty($c['name']) || ! empty($c['logo'])))
     : array_map(fn ($name) => ['name' => $name, 'logo' => ''], $default_clients);
 
+  // Durations are how long one full loop takes — higher = slower.
   $rows = [
-    ['direction' => 'left', 'duration' => 32],
-    ['direction' => 'right', 'duration' => 26],
-    ['direction' => 'left', 'duration' => 38],
+    ['direction' => 'left', 'duration' => 48],
+    ['direction' => 'right', 'duration' => 40],
+    ['direction' => 'left', 'duration' => 56],
   ];
 @endphp
 
