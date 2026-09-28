@@ -25,8 +25,12 @@
 
         <h1 class="text-balance font-display text-4xl font-bold tracking-tight text-ink md:text-6xl">{!! get_the_title() !!}</h1>
         <p class="mt-2 text-lg text-ink/60">{{ $p['client'] }} &middot; {{ $p['year'] }}</p>
-        @if ($p['category'])
-          <a href="{{ $p['category']['link'] }}" class="mt-4 inline-block rounded-full bg-citrus-orange/10 px-3 py-1 text-sm font-semibold text-citrus-orange transition hover:bg-citrus-orange/20">{!! $p['category']['name'] !!}</a>
+        @if (! empty($p['categories']))
+          <div class="mt-4 flex flex-wrap gap-2">
+            @foreach ($p['categories'] as $category)
+              <a href="{{ $category['link'] }}" class="inline-block rounded-full bg-citrus-orange/10 px-3 py-1 text-sm font-semibold text-citrus-orange transition hover:bg-citrus-orange/20">{!! $category['name'] !!}</a>
+            @endforeach
+          </div>
         @endif
 
         {{-- 16:9 video stage — Vimeo embed or self-hosted <video> --}}
@@ -90,11 +94,15 @@
         @if (! empty($p['gallery']))
           <div class="mt-16">
             <h2 class="font-display text-2xl font-bold text-ink">{{ __('Behind the Scenes', 'sage') }}</h2>
-            <div class="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-              @foreach ($p['gallery'] as $i => $src)
-                <div class="relative overflow-hidden rounded-2xl bg-ink/5 {{ $i === 0 ? 'sm:col-span-2 sm:row-span-2 aspect-video sm:aspect-square' : 'aspect-video' }}">
-                  <img src="{{ $src }}" alt="{!! sprintf(__('Behind the scenes of %s', 'sage'), get_the_title()) !!}" class="h-full w-full object-cover" loading="lazy">
-                </div>
+            <div class="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-3" data-gallery>
+              @foreach ($p['gallery'] as $src)
+                <button
+                  type="button"
+                  data-gallery-item
+                  class="group relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden rounded-2xl bg-ink/5 p-0 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-citrus-orange"
+                >
+                  <img src="{{ $src }}" alt="{!! sprintf(__('Behind the scenes of %s', 'sage'), get_the_title()) !!}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                </button>
               @endforeach
             </div>
           </div>

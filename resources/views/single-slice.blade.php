@@ -26,8 +26,12 @@
             &middot; {{ count($s['clips']) }} {{ __('clips', 'sage') }}
           @endif
         </p>
-        @if ($s['category'])
-          <a href="{{ $s['category']['link'] }}" class="mt-4 inline-block rounded-full bg-citrus-green/15 px-3 py-1 text-sm font-semibold text-citrus-green-dark transition hover:bg-citrus-green/25">{!! $s['category']['name'] !!}</a>
+        @if (! empty($s['categories']))
+          <div class="mt-4 flex flex-wrap gap-2">
+            @foreach ($s['categories'] as $category)
+              <a href="{{ $category['link'] }}" class="inline-block rounded-full bg-citrus-green/15 px-3 py-1 text-sm font-semibold text-citrus-green-dark transition hover:bg-citrus-green/25">{!! $category['name'] !!}</a>
+            @endforeach
+          </div>
         @endif
 
         {{-- Video gallery — a Citrus Slices project is a series of clips --}}
@@ -133,11 +137,15 @@
         @if (! empty($s['gallery']))
           <div class="mt-16">
             <h2 class="font-display text-2xl font-bold text-ink">{{ __('Behind the Scenes', 'sage') }}</h2>
-            <div class="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-              @foreach ($s['gallery'] as $i => $src)
-                <div class="relative overflow-hidden rounded-2xl bg-ink/5 {{ $i === 0 ? 'sm:col-span-2 sm:row-span-2 aspect-video sm:aspect-square' : 'aspect-video' }}">
-                  <img src="{{ $src }}" alt="{!! sprintf(__('Behind the scenes of %s', 'sage'), get_the_title()) !!}" class="h-full w-full object-cover" loading="lazy">
-                </div>
+            <div class="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-3" data-gallery>
+              @foreach ($s['gallery'] as $src)
+                <button
+                  type="button"
+                  data-gallery-item
+                  class="group relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden rounded-2xl bg-ink/5 p-0 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-citrus-orange"
+                >
+                  <img src="{{ $src }}" alt="{!! sprintf(__('Behind the scenes of %s', 'sage'), get_the_title()) !!}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                </button>
               @endforeach
             </div>
           </div>

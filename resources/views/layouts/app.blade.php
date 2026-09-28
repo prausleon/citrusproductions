@@ -35,6 +35,7 @@
       @endif
 
       @include('partials.video-lightbox')
+      @include('partials.gallery-lightbox')
     </div>
 
     @php(do_action('get_footer'))

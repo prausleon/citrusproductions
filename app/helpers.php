@@ -183,6 +183,9 @@ function v0_category_archive_link(\WP_Term $term, string $post_type): string
  * A post's primary category as ['name' => ..., 'link' => ...] for
  * rendering a clickable badge, or null if it has no category. `$post_type`
  * decides which archive (Works Archive / Slices Hub) the link points at.
+ * Used for the compact badge on archive/listing cards, which only ever
+ * shows one category — see v0_category_views() for the full list, used on
+ * the single project/slice pages.
  */
 function v0_category_view(int $post_id, string $post_type): ?array
 {
@@ -196,6 +199,26 @@ function v0_category_view(int $post_id, string $post_type): ?array
         'name' => $term->name,
         'link' => v0_category_archive_link($term, $post_type),
     ];
+}
+
+/**
+ * Every "Category" term assigned to a `project` or `slice` post, each as
+ * ['name' => ..., 'link' => ...]. Unlike v0_category_view() (single,
+ * card-listing badge), this is for the single project/slice page, where a
+ * post can carry more than one category and all of them should show.
+ */
+function v0_category_views(int $post_id, string $post_type): array
+{
+    $terms = get_the_terms($post_id, 'category');
+
+    if (empty($terms) || is_wp_error($terms)) {
+        return [];
+    }
+
+    return array_map(fn (\WP_Term $term) => [
+        'name' => $term->name,
+        'link' => v0_category_archive_link($term, $post_type),
+    ], $terms);
 }
 
 /**
@@ -290,7 +313,7 @@ function v0_project_data(int $post_id): array
         'thumb' => v0_video_thumbnail($video, $post_id, 'large', get_post_meta($post_id, 'thumbnail', true)),
         'client' => get_post_meta($post_id, 'client', true),
         'year' => get_post_meta($post_id, 'year', true),
-        'category' => v0_category_view($post_id, 'project'),
+        'categories' => v0_category_views($post_id, 'project'),
         'summary' => get_post_meta($post_id, 'summary', true),
         'distribution' => array_column(v0_meta_array(get_post_meta($post_id, 'distribution', true)), 'value'),
         'credits' => v0_meta_array(get_post_meta($post_id, 'credits', true)),
@@ -340,7 +363,7 @@ function v0_slice_data(int $post_id): array
 
     return [
         'client' => get_post_meta($post_id, 'client', true),
-        'category' => v0_category_view($post_id, 'slice'),
+        'categories' => v0_category_views($post_id, 'slice'),
         'summary' => get_post_meta($post_id, 'summary', true),
         'clips' => $clips,
         'cover_video' => $cover_video,

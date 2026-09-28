@@ -361,6 +361,87 @@ function initVideoLightbox() {
 }
 
 // ---------------------------------------------------------------------
+// "Behind the Scenes" gallery lightbox (single-project / single-slice)
+// ---------------------------------------------------------------------
+// Any grid marked up as [data-gallery] wrapping [data-gallery-item] buttons
+// opens here on click, with Prev/Next stepping through that same grid's
+// images. One lightbox in the DOM (partials.gallery-lightbox) serves every
+// gallery on the page.
+function initGalleryLightbox() {
+  const box = document.querySelector('[data-gallery-lightbox]')
+  if (!box) return
+
+  const img = box.querySelector('[data-gallery-image]')
+  const counter = box.querySelector('[data-gallery-counter]')
+  const panel = box.querySelector('[data-gallery-panel]')
+  const prevBtn = box.querySelector('[data-gallery-prev]')
+  const nextBtn = box.querySelector('[data-gallery-next]')
+
+  let items = []
+  let index = 0
+
+  const show = () => {
+    const item = items[index]
+    if (!item) return
+    img.src = item.src
+    img.alt = item.alt
+    const multi = items.length > 1
+    counter.textContent = multi ? `${index + 1} / ${items.length}` : ''
+    prevBtn.classList.toggle('hidden', !multi)
+    nextBtn.classList.toggle('hidden', !multi)
+  }
+
+  const open = (group, startIndex) => {
+    items = Array.from(group.querySelectorAll('[data-gallery-item] img')).map((el) => ({
+      src: el.currentSrc || el.src,
+      alt: el.alt,
+    }))
+    if (!items.length) return
+    index = startIndex
+    show()
+    box.classList.remove('hidden')
+    box.classList.add('flex')
+    document.body.style.overflow = 'hidden'
+  }
+
+  const close = () => {
+    box.classList.add('hidden')
+    box.classList.remove('flex')
+    img.removeAttribute('src')
+    document.body.style.overflow = ''
+  }
+
+  const step = (delta) => {
+    if (!items.length) return
+    index = (index + delta + items.length) % items.length
+    show()
+  }
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-gallery-item]')
+    if (trigger) {
+      e.preventDefault()
+      const group = trigger.closest('[data-gallery]')
+      const siblings = Array.from(group.querySelectorAll('[data-gallery-item]'))
+      open(group, siblings.indexOf(trigger))
+      return
+    }
+    if (e.target.closest('[data-gallery-prev]')) { step(-1); return }
+    if (e.target.closest('[data-gallery-next]')) { step(1); return }
+    if (e.target.closest('[data-gallery-close]') || e.target === box) close()
+  })
+
+  panel?.addEventListener('click', (e) => e.stopPropagation())
+
+  document.addEventListener('keydown', (e) => {
+    if (box.classList.contains('hidden')) return
+    if (e.key === 'Escape') close()
+    if (e.key === 'ArrowLeft') step(-1)
+    if (e.key === 'ArrowRight') step(1)
+  })
+}
+
+// ---------------------------------------------------------------------
 // Competencies accordion (components/sections/competencies.tsx)
 // ---------------------------------------------------------------------
 function initAccordion() {
@@ -405,5 +486,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav()
   initAnchorScrollOnLoad()
   initVideoLightbox()
+  initGalleryLightbox()
   initAccordion()
 })

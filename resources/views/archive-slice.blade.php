@@ -22,7 +22,7 @@
       </p>
 
       @if (is_category())
-        <p class="mt-4 text-sm font-semibold text-white/90">
+        <p class="mt-4 text-lg font-semibold text-white/90">
           {{ __('Filtered by:', 'sage') }} {!! single_cat_title('', false) !!}
           &mdash; <a href="{{ get_post_type_archive_link('slice') }}" class="underline underline-offset-2 hover:text-white">{{ __('View all Citrus Slices', 'sage') }}</a>
         </p>
