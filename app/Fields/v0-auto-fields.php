@@ -281,7 +281,25 @@ add_action('cmb2_admin_init', function () {
         'show_names' => true,
     ]);
 
+    // Section dividers ('title' fields) below split this box into tabs on
+    // the edit screen — see resources/js/admin-cmb2-tabs.js. A box needs 2+
+    // of them before the script bothers tabbing it.
+    $project->add_field(['name' => __('Details', 'sage'), 'type' => 'title', 'id' => 'title_project_details']);
     $project->add_field(['name' => __('Client', 'sage'), 'id' => 'client', 'type' => 'text']);
+    $project->add_field(['name' => __('Year', 'sage'), 'id' => 'year', 'type' => 'text']);
+    $project->add_field([
+        'name' => __('Summary ("The Squeeze")', 'sage'),
+        'id' => 'summary',
+        'type' => 'textarea_small',
+    ]);
+    $project->add_field([
+        'name' => __('Feature on Homepage', 'sage'),
+        'desc' => __('Show this project in the "Our Work" grid on the homepage (max 6 shown).', 'sage'),
+        'id' => 'featured',
+        'type' => 'checkbox',
+    ]);
+
+    $project->add_field(['name' => __('Video', 'sage'), 'type' => 'title', 'id' => 'title_project_video']);
     $project->add_field([
         'name' => __('Vimeo Video ID', 'sage'),
         'desc' => __('Numeric ID from the Vimeo URL — powers the thumbnail and player. Pasting the full Vimeo URL instead also works; it gets cleaned up to just the ID automatically.', 'sage'),
@@ -305,19 +323,8 @@ add_action('cmb2_admin_init', function () {
         'type' => 'file',
         'options' => ['url' => false],
     ]);
-    $project->add_field(['name' => __('Year', 'sage'), 'id' => 'year', 'type' => 'text']);
-    $project->add_field([
-        'name' => __('Summary ("The Squeeze")', 'sage'),
-        'id' => 'summary',
-        'type' => 'textarea_small',
-    ]);
-    $project->add_field([
-        'name' => __('Feature on Homepage', 'sage'),
-        'desc' => __('Show this project in the "Our Work" grid on the homepage (max 6 shown).', 'sage'),
-        'id' => 'featured',
-        'type' => 'checkbox',
-    ]);
 
+    $project->add_field(['name' => __('Distribution & Credits', 'sage'), 'type' => 'title', 'id' => 'title_project_distribution']);
     $distribution = $project->add_field([
         'name' => __('Distribution', 'sage'),
         'id' => 'distribution',
@@ -345,6 +352,7 @@ add_action('cmb2_admin_init', function () {
     $project->add_group_field($credits, ['name' => __('Role', 'sage'), 'id' => 'role', 'type' => 'text']);
     $project->add_group_field($credits, ['name' => __('Name', 'sage'), 'id' => 'name', 'type' => 'text']);
 
+    $project->add_field(['name' => __('Gallery', 'sage'), 'type' => 'title', 'id' => 'title_project_gallery']);
     $project->add_field([
         'name' => __('Behind the Scenes Gallery', 'sage'),
         'id' => 'gallery',
@@ -366,7 +374,24 @@ add_action('cmb2_admin_init', function () {
         'show_names' => true,
     ]);
 
+    // Section dividers ('title' fields) below split this box into tabs on
+    // the edit screen — see resources/js/admin-cmb2-tabs.js. A box needs 2+
+    // of them before the script bothers tabbing it.
+    $slice->add_field(['name' => __('Details', 'sage'), 'type' => 'title', 'id' => 'title_slice_details']);
     $slice->add_field(['name' => __('Client', 'sage'), 'id' => 'client', 'type' => 'text']);
+    $slice->add_field([
+        'name' => __('Summary ("The Squeeze")', 'sage'),
+        'id' => 'summary',
+        'type' => 'textarea_small',
+    ]);
+    $slice->add_field([
+        'name' => __('Feature on Homepage', 'sage'),
+        'desc' => __('Show this slice series in the "Citrus Slices" grid on the homepage (max 6 shown).', 'sage'),
+        'id' => 'featured',
+        'type' => 'checkbox',
+    ]);
+
+    $slice->add_field(['name' => __('Cover Video', 'sage'), 'type' => 'title', 'id' => 'title_slice_cover_video']);
     $slice->add_field([
         'name' => __('Cover Vimeo Video ID', 'sage'),
         'desc' => __('Used for the grid thumbnail + quick-play cover. Pasting the full Vimeo URL instead also works; it gets cleaned up to just the ID automatically.', 'sage'),
@@ -390,18 +415,8 @@ add_action('cmb2_admin_init', function () {
         'type' => 'file',
         'options' => ['url' => false],
     ]);
-    $slice->add_field([
-        'name' => __('Summary ("The Squeeze")', 'sage'),
-        'id' => 'summary',
-        'type' => 'textarea_small',
-    ]);
-    $slice->add_field([
-        'name' => __('Feature on Homepage', 'sage'),
-        'desc' => __('Show this slice series in the "Citrus Slices" grid on the homepage (max 6 shown).', 'sage'),
-        'id' => 'featured',
-        'type' => 'checkbox',
-    ]);
 
+    $slice->add_field(['name' => __('Clips', 'sage'), 'type' => 'title', 'id' => 'title_slice_clips']);
     $clips = $slice->add_field([
         'name' => __('Clips', 'sage'),
         'desc' => __('Each Citrus Slices series is a gallery of short clips.', 'sage'),
@@ -438,6 +453,7 @@ add_action('cmb2_admin_init', function () {
         'options' => ['url' => false],
     ]);
 
+    $slice->add_field(['name' => __('Distribution & Credits', 'sage'), 'type' => 'title', 'id' => 'title_slice_distribution']);
     $slice_distribution = $slice->add_field([
         'name' => __('Distribution', 'sage'),
         'desc' => __('The Distribution section on the slice page is hidden entirely when this is left empty.', 'sage'),
@@ -467,6 +483,7 @@ add_action('cmb2_admin_init', function () {
     $slice->add_group_field($slice_credits, ['name' => __('Role', 'sage'), 'id' => 'role', 'type' => 'text']);
     $slice->add_group_field($slice_credits, ['name' => __('Name', 'sage'), 'id' => 'name', 'type' => 'text']);
 
+    $slice->add_field(['name' => __('Gallery', 'sage'), 'type' => 'title', 'id' => 'title_slice_gallery']);
     $slice->add_field([
         'name' => __('Behind the Scenes Gallery', 'sage'),
         'id' => 'gallery',

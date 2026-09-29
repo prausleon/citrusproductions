@@ -18,6 +18,8 @@ export default defineConfig({
         'resources/js/app.js',
         'resources/css/editor.css',
         'resources/js/editor.js',
+        'resources/css/admin-cmb2-tabs.css',
+        'resources/js/admin-cmb2-tabs.js',
       ],
       refresh: true,
       assets: ['resources/images/**', 'resources/fonts/**'],

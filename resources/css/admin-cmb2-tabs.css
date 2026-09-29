@@ -1,0 +1,49 @@
+/*
+ * CMB2 field tabs (wp-admin only) — styling for the tab bar that
+ * resources/js/admin-cmb2-tabs.js builds. Colors match core wp-admin
+ * (#2271b1 is the same blue WordPress uses for its own active-tab state),
+ * so this blends in rather than looking like a theme-injected widget.
+ */
+.v0-cmb2-tabs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0 0 20px;
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.v0-cmb2-tab-button {
+  margin: 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  background: transparent;
+  padding: 8px 14px;
+  color: #2271b1;
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.v0-cmb2-tab-button:hover {
+  background: #f0f0f1;
+  color: #135e96;
+}
+
+.v0-cmb2-tab-button:focus-visible {
+  outline: 2px solid #2271b1;
+  outline-offset: 1px;
+}
+
+.v0-cmb2-tab-button[aria-selected='true'] {
+  position: relative;
+  top: 1px;
+  border-color: #c3c4c7 #c3c4c7 #fff;
+  background: #fff;
+  color: #1d2327;
+  font-weight: 600;
+}
+
+.v0-cmb2-tab-panel[hidden] {
+  display: none;
+}

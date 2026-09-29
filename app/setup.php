@@ -48,6 +48,22 @@ add_action('admin_head', function () {
 });
 
 /**
+ * CMB2 field tabs — see resources/js/admin-cmb2-tabs.js. Loaded on every
+ * wp-admin screen rather than only on known edit screens: the script
+ * self-guards (it only reorganizes a CMB2 box that has 2+ section
+ * dividers, and does nothing at all where CMB2 isn't rendering), so there's
+ * no per-screen allowlist to keep in sync as boxes are added or changed.
+ *
+ * @return void
+ */
+add_action('admin_head', function () {
+    echo Vite::withEntryPoints([
+        'resources/css/admin-cmb2-tabs.css',
+        'resources/js/admin-cmb2-tabs.js',
+    ])->toHtml();
+});
+
+/**
  * Use the generated theme.json file.
  *
  * @return string
