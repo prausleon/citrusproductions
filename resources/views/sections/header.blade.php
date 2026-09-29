@@ -5,6 +5,7 @@
   home first (`data-nav-anchor` is wired up in resources/js/app.js).
 --}}
 @php
+  $logo = \App\v0_image_or(\App\v0_home_meta('header_logo'), 'citrus-logo.png');
   $nav_items = [
     'about' => __('About', 'sage'),
     'work' => __('Work', 'sage'),
@@ -23,9 +24,9 @@
     aria-label="{{ get_bloginfo('name') }} — {{ __('home', 'sage') }}"
   >
     <img
-      src="{{ \App\v0_image('citrus-logo.png') }}"
+      src="{{ $logo }}"
       alt="{{ get_bloginfo('name') }}"
-      class="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
+      class="h-14 w-14 shrink-0 object-contain sm:h-20 sm:w-20 md:h-20 md:w-20"
     >
   </a>
 

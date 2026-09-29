@@ -53,6 +53,16 @@ add_action('cmb2_admin_init', function () {
         'priority' => 'high',
     ]);
 
+    // — Header (shown on every page, not just the homepage) -------------
+    $home->add_field(['name' => __('Header', 'sage'), 'type' => 'title', 'id' => 'title_header']);
+    $home->add_field([
+        'name' => __('Header Logo', 'sage'),
+        'desc' => __('The logo shown top-left on every page. Leave blank to use the default Citrus logo.', 'sage'),
+        'id' => 'header_logo',
+        'type' => 'file',
+        'options' => ['url' => false],
+    ]);
+
     // — Hero ------------------------------------------------------------
     $home->add_field(['name' => __('Hero Section', 'sage'), 'type' => 'title', 'id' => 'title_hero']);
     $home->add_field([

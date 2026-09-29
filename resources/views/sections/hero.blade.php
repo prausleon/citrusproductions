@@ -71,10 +71,10 @@
         </div>
 
         <div data-hero-copy class="col-start-1 row-start-1">
-          <p class="mb-4 inline-block rounded-full bg-citrus-orange px-4 py-1.5 font-display text-xs font-bold uppercase tracking-[0.3em] text-white shadow-sm sm:text-sm">
+          <p class="mb-4 inline-block rounded-full bg-citrus-orange px-4 py-1.5 font-display text-sm font-bold uppercase tracking-[0.3em] text-white shadow-sm sm:text-base">
             {{ $eyebrow }}
           </p>
-          <h1 class="mx-auto max-w-4xl text-balance font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-6xl md:text-7xl">
+          <h1 class="mx-auto max-w-4xl text-balance font-display text-3xl font-bold leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-6xl">
             {{ $prefix }} <span class="italic text-citrus-orange-dark">{{ $emphasis }}</span>
             <br>
             {!! wptexturize($line2) !!}
