@@ -253,6 +253,34 @@ add_action('cmb2_admin_init', function () {
     $home->add_group_field($socials_group, ['name' => __('Label', 'sage'), 'id' => 'label', 'type' => 'text']);
     $home->add_group_field($socials_group, ['name' => __('URL', 'sage'), 'id' => 'url', 'type' => 'text_url']);
 
+    // — Producers (shown as "Contact our Producers" in the Contact section) -
+    $home->add_field([
+        'name' => __('Producers', 'sage'),
+        'desc' => __('Shown as "Contact our Producers" in the Contact section, on every page. Planned for 2 producers, but add or remove as needed.', 'sage'),
+        'type' => 'title',
+        'id' => 'title_producers',
+    ]);
+    $producers_group = $home->add_field([
+        'id' => 'contact_producers',
+        'type' => 'group',
+        'options' => [
+            'group_title' => __('Producer {#}', 'sage'),
+            'add_button' => __('Add Producer', 'sage'),
+            'remove_button' => __('Remove', 'sage'),
+            'sortable' => true,
+        ],
+    ]);
+    $home->add_group_field($producers_group, [
+        'name' => __('Picture', 'sage'),
+        'desc' => __('Shown as a circular photo. Leave blank to show their initial instead.', 'sage'),
+        'id' => 'photo',
+        'type' => 'file',
+        'options' => ['url' => false],
+    ]);
+    $home->add_group_field($producers_group, ['name' => __('Name', 'sage'), 'id' => 'name', 'type' => 'text']);
+    $home->add_group_field($producers_group, ['name' => __('Designation', 'sage'), 'id' => 'designation', 'type' => 'text']);
+    $home->add_group_field($producers_group, ['name' => __('Email Address', 'sage'), 'id' => 'email', 'type' => 'text_email']);
+
     // — Contact Form 7 integration -----------------------------------------
     $home->add_field(['name' => __('Contact Form (Contact Form 7)', 'sage'), 'type' => 'title', 'id' => 'title_contact_form']);
     $home->add_field([

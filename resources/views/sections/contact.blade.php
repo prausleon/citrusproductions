@@ -29,6 +29,8 @@
   ];
   $socials = \App\v0_home_meta('contact_socials', $default_socials);
 
+  $producers = \App\v0_home_meta('contact_producers', []);
+
   $footer_logo = \App\v0_image_or(\App\v0_home_meta('footer_logo'), 'citrus-logo.png');
   $footer_tagline = \App\v0_home_meta('footer_tagline', 'Citrus Video Productions');
 
@@ -51,7 +53,40 @@
     <p class="mb-3 font-display text-sm font-bold uppercase tracking-[0.3em] text-white/80">{{ $eyebrow }}</p>
     <h2 class="max-w-3xl text-balance font-display text-5xl font-bold leading-none tracking-tight md:text-7xl">{{ $heading }}</h2>
 
-    <div class="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr]">
+    {{-- "Contact our Producers" — a small, fixed-size roster (2 by default), hidden entirely when none are set. --}}
+    @if (! empty($producers))
+      <div class="mt-8 grid gap-5 sm:grid-cols-2">
+        @foreach ($producers as $producer)
+          @continue(empty($producer['name']))
+          <div class="flex items-center gap-5 rounded-2xl bg-white/10 p-5">
+            @if (! empty($producer['photo']))
+              <img
+                src="{{ $producer['photo'] }}"
+                alt="{{ $producer['name'] }}"
+                class="h-20 w-20 shrink-0 rounded-full object-cover ring-2 ring-white/30"
+              >
+            @else
+              <span class="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white/20 font-display text-2xl font-bold text-white ring-2 ring-white/30" aria-hidden="true">
+                {{ mb_strtoupper(mb_substr($producer['name'], 0, 1)) }}
+              </span>
+            @endif
+            <div class="min-w-0">
+              <p class="font-display text-lg font-bold leading-tight">{{ $producer['name'] }}</p>
+              @if (! empty($producer['designation']))
+                <p class="text-base text-white/70">{{ $producer['designation'] }}</p>
+              @endif
+              @if (! empty($producer['email']))
+                <a href="mailto:{{ $producer['email'] }}" class="mt-1 inline-block break-all text-base font-semibold underline-offset-2 hover:underline">
+                  {{ $producer['email'] }}
+                </a>
+              @endif
+            </div>
+          </div>
+        @endforeach
+      </div>
+    @endif
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[1fr_1.3fr]">
       {{-- Left: contact details --}}
       <div class="flex h-full flex-col gap-4">
         <a href="mailto:{{ $email }}" class="group rounded-3xl bg-white/10 p-7 backdrop-blur transition hover:bg-white/20">
