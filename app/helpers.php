@@ -140,6 +140,32 @@ function v0_meta_array($value): array
 }
 
 /**
+ * Whether a "Behind the Scenes" gallery file is a video rather than an
+ * image, by extension. The gallery field is a plain CMB2 `file_list`
+ * (any file type), so nothing stops someone from uploading a clip
+ * alongside the photos — this is how the gallery grid/lightbox tell the
+ * two apart to render each correctly.
+ */
+function v0_is_video_url(string $url): bool
+{
+    $ext = strtolower(pathinfo(parse_url($url, PHP_URL_PATH) ?: $url, PATHINFO_EXTENSION));
+
+    return in_array($ext, ['mp4', 'mov', 'm4v', 'webm', 'ogv'], true);
+}
+
+/**
+ * Maps a gallery's `file_list` URLs into `['url' => ..., 'type' => 'image'|'video']`
+ * for the "Behind the Scenes" grid/lightbox. See v0_is_video_url().
+ */
+function v0_gallery_items(array $urls): array
+{
+    return array_map(
+        fn ($url) => ['url' => $url, 'type' => v0_is_video_url($url) ? 'video' : 'image'],
+        $urls
+    );
+}
+
+/**
  * The first assigned "Category" term for a `project` or `slice` post, or
  * null if none is set. Both post types use WordPress's native `category`
  * taxonomy (see app/post-types.php) instead of a plain CMB2 text field.
@@ -317,7 +343,7 @@ function v0_project_data(int $post_id): array
         'summary' => get_post_meta($post_id, 'summary', true),
         'distribution' => array_column(v0_meta_array(get_post_meta($post_id, 'distribution', true)), 'value'),
         'credits' => v0_meta_array(get_post_meta($post_id, 'credits', true)),
-        'gallery' => array_values(v0_meta_array(get_post_meta($post_id, 'gallery', true))),
+        'gallery' => v0_gallery_items(array_values(v0_meta_array(get_post_meta($post_id, 'gallery', true)))),
     ];
 }
 
@@ -374,7 +400,7 @@ function v0_slice_data(int $post_id): array
             ['role' => 'Editing', 'name' => 'Citrus Post'],
             ['role' => 'Motion Graphics', 'name' => 'Citrus GFX'],
         ],
-        'gallery' => array_values(v0_meta_array(get_post_meta($post_id, 'gallery', true))),
+        'gallery' => v0_gallery_items(array_values(v0_meta_array(get_post_meta($post_id, 'gallery', true)))),
     ];
 }
 

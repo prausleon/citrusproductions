@@ -95,13 +95,24 @@
           <div class="mt-16">
             <h2 class="font-display text-2xl font-bold text-ink">{{ __('Behind the Scenes', 'sage') }}</h2>
             <div class="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-3" data-gallery>
-              @foreach ($p['gallery'] as $src)
+              @foreach ($p['gallery'] as $item)
                 <button
                   type="button"
                   data-gallery-item
+                  data-gallery-type="{{ $item['type'] }}"
+                  data-gallery-src="{{ $item['url'] }}"
                   class="group relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden rounded-2xl bg-ink/5 p-0 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-citrus-orange"
                 >
-                  <img src="{{ $src }}" alt="{!! sprintf(__('Behind the scenes of %s', 'sage'), get_the_title()) !!}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                  @if ($item['type'] === 'video')
+                    <video src="{{ $item['url'] }}#t=0.1" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" muted playsinline preload="metadata" tabindex="-1"></video>
+                    <span class="absolute inset-0 flex items-center justify-center bg-ink/20 transition group-hover:bg-ink/30" aria-hidden="true">
+                      <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-citrus-orange shadow-lg transition group-hover:scale-110">
+                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      </span>
+                    </span>
+                  @else
+                    <img src="{{ $item['url'] }}" alt="{!! sprintf(__('Behind the scenes of %s', 'sage'), get_the_title()) !!}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                  @endif
                 </button>
               @endforeach
             </div>

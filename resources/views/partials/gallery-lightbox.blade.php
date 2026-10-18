@@ -1,9 +1,11 @@
 {{--
-  Global "Behind the Scenes" image gallery lightbox. Opens on click from any
-  grid marked up as [data-gallery] wrapping a set of [data-gallery-item]
+  Global "Behind the Scenes" gallery lightbox. Opens on click from any grid
+  marked up as [data-gallery] wrapping a set of [data-gallery-item]
   thumbnails (see single-project.blade.php / single-slice.blade.php).
-  resources/js/app.js reads the images out of whichever gallery was clicked,
-  so this one lightbox serves every gallery on the page.
+  resources/js/app.js reads each item's data-gallery-type/-src out of
+  whichever gallery was clicked, so this one lightbox serves every gallery
+  on the page — showing either the <img> or the <video> below depending on
+  whether that item is a photo or an uploaded clip.
 --}}
 <div
   data-gallery-lightbox
@@ -41,6 +43,7 @@
   <div class="w-full max-w-5xl" data-gallery-panel>
     <div class="relative aspect-video overflow-hidden rounded-2xl bg-black shadow-2xl">
       <img data-gallery-image src="" alt="" class="absolute inset-0 h-full w-full object-contain">
+      <video data-gallery-video class="absolute inset-0 hidden h-full w-full object-contain" controls playsinline></video>
     </div>
     <p data-gallery-counter class="mt-4 text-center text-sm font-semibold text-white/70"></p>
   </div>

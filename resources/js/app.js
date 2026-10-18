@@ -372,6 +372,7 @@ function initGalleryLightbox() {
   if (!box) return
 
   const img = box.querySelector('[data-gallery-image]')
+  const video = box.querySelector('[data-gallery-video]')
   const counter = box.querySelector('[data-gallery-counter]')
   const panel = box.querySelector('[data-gallery-panel]')
   const prevBtn = box.querySelector('[data-gallery-prev]')
@@ -380,21 +381,40 @@ function initGalleryLightbox() {
   let items = []
   let index = 0
 
+  const stopVideo = () => {
+    video.pause()
+    video.removeAttribute('src')
+    video.load()
+    video.classList.add('hidden')
+  }
+
   const show = () => {
     const item = items[index]
     if (!item) return
-    img.src = item.src
-    img.alt = item.alt
     const multi = items.length > 1
     counter.textContent = multi ? `${index + 1} / ${items.length}` : ''
     prevBtn.classList.toggle('hidden', !multi)
     nextBtn.classList.toggle('hidden', !multi)
+
+    if (item.type === 'video') {
+      img.classList.add('hidden')
+      img.removeAttribute('src')
+      video.src = item.src
+      video.classList.remove('hidden')
+      video.play().catch(() => {})
+    } else {
+      stopVideo()
+      img.classList.remove('hidden')
+      img.src = item.src
+      img.alt = item.alt
+    }
   }
 
   const open = (group, startIndex) => {
-    items = Array.from(group.querySelectorAll('[data-gallery-item] img')).map((el) => ({
-      src: el.currentSrc || el.src,
-      alt: el.alt,
+    items = Array.from(group.querySelectorAll('[data-gallery-item]')).map((el) => ({
+      src: el.dataset.gallerySrc,
+      alt: el.querySelector('img')?.alt || '',
+      type: el.dataset.galleryType === 'video' ? 'video' : 'image',
     }))
     if (!items.length) return
     index = startIndex
@@ -408,6 +428,7 @@ function initGalleryLightbox() {
     box.classList.add('hidden')
     box.classList.remove('flex')
     img.removeAttribute('src')
+    stopVideo()
     document.body.style.overflow = ''
   }
 
